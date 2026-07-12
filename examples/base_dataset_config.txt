@@ -1,0 +1,16 @@
+# Build a base AprilGrid pose dataset from raw captures.
+# Lines use: key = value
+# Use quotes when a path contains spaces.
+
+cube-image-dir = G:/galaxydata/cube2
+cube-aprilgrid-json = G:/projects/metasurface_3d_reconstruction/code/Aprilgrid/outputs/aprilgrid_10x10_5mm.json
+intrinsic-candidate = cube2=G:/galaxydata/cube2,G:/projects/metasurface_3d_reconstruction/code/Aprilgrid/outputs/aprilgrid_10x10_5mm.json
+response-mat = G:/projects/metasurface_3d_reconstruction/metasurface_data/shuju/A_matrix_normalized.mat
+output-dir = metasurface_data_pipeline/outputs/cube2_base
+
+calibration-max-frames = 160
+min-markers = 8
+min-accepted-frames = 8
+reprojection-threshold-px = 5.0
+save-debug-images = true
+debug-image-limit = 20

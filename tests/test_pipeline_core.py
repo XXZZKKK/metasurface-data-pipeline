@@ -86,6 +86,47 @@ class MetasurfaceDataPipelineCoreTests(unittest.TestCase):
         self.assertEqual(list(spec.markers.keys()), [5])
         self.assertEqual(spec.markers[5].corners_m.shape, (4, 3))
 
+    def test_text_config_expands_to_cli_arguments(self):
+        from metasurface_data_pipeline.config.text_config import config_file_to_argv, expand_config_argv
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "dense_config.txt"
+            path.write_text(
+                """
+                # comments and blank lines are ignored
+                dataset_dir = G:/data/base
+                source_image_dir = "G:/data folder/pawn"
+                center-window = 3
+                include-polar = true
+                strict-board-canvas = false
+                intrinsic-candidate = pawn=G:/images,G:/grid.json
+                base-roi = 1746 1019
+                """,
+                encoding="utf-8",
+            )
+
+            expanded = config_file_to_argv(path)
+            self.assertIn("--dataset-dir", expanded)
+            self.assertIn("G:/data/base", expanded)
+            self.assertIn("--source-image-dir", expanded)
+            self.assertIn("G:/data folder/pawn", expanded)
+            self.assertIn("--include-polar", expanded)
+            self.assertNotIn("--strict-board-canvas", expanded)
+            self.assertEqual(expanded[expanded.index("--intrinsic-candidate") + 1], "pawn=G:/images,G:/grid.json")
+            self.assertEqual(expanded[expanded.index("--base-roi") + 1 : expanded.index("--base-roi") + 3], ["1746", "1019"])
+
+            combined = expand_config_argv(["--config", str(path), "--center-window", "1"])
+            self.assertEqual(combined[-2:], ["--center-window", "1"])
+
+    def test_example_text_configs_are_parseable(self):
+        from metasurface_data_pipeline.config.text_config import config_file_to_argv
+
+        package_root = Path(__file__).resolve().parents[1]
+        for path in sorted((package_root / "examples").glob("*.txt")):
+            with self.subTest(config=path.name):
+                argv = config_file_to_argv(path)
+                self.assertGreater(len(argv), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

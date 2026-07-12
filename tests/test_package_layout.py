@@ -15,6 +15,9 @@ class MetasurfaceDataPipelineLayoutTests(unittest.TestCase):
             "metasurface_data_pipeline.calibration.board_prior",
             "metasurface_data_pipeline.config.paths",
             "metasurface_data_pipeline.config.roi",
+            "metasurface_data_pipeline.config.text_config",
+            "metasurface_data_pipeline.compat.roi",
+            "metasurface_data_pipeline.compat.dense_observations",
             "metasurface_data_pipeline.observations.base_dataset",
             "metasurface_data_pipeline.observations.board_constrained",
             "metasurface_data_pipeline.observations.dense",
@@ -38,6 +41,30 @@ class MetasurfaceDataPipelineLayoutTests(unittest.TestCase):
             dense_observations.dense_observation_template,
             categorized_dense.dense_observation_template,
         )
+
+    def test_legacy_wrapper_files_are_grouped_under_compat(self):
+        from pathlib import Path
+
+        package_root = Path(__file__).resolve().parents[1]
+        legacy_names = [
+            "aprilgrid.py",
+            "base_dataset.py",
+            "basis.py",
+            "board_constrained_dataset.py",
+            "board_prior.py",
+            "dense_observations.py",
+            "geometry.py",
+            "paths.py",
+            "real_metasurface.py",
+            "response.py",
+            "roi.py",
+            "sparse_observations.py",
+            "spectral_pixel_observations.py",
+        ]
+        for name in legacy_names:
+            with self.subTest(wrapper=name):
+                self.assertFalse((package_root / name).exists())
+                self.assertTrue((package_root / "compat" / name).is_file())
 
 
 if __name__ == "__main__":

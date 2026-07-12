@@ -21,6 +21,7 @@ from ..core.real_metasurface import build_analyzer_vectors, intersect_rays_with_
 from .spectral_pixel import _load_real_response, _resolve_image_path
 from ..config.roi import load_rois_json, save_rois_json, union_crop, validate_rois
 from ..config.paths import default_output_dir
+from ..config.text_config import add_config_argument, expand_config_argv
 
 
 ALL_SUBCELL_IDS = tuple(range(16))
@@ -374,6 +375,7 @@ def derive_dense_multi_roi_dataset(
 
 def build_parser():
     parser = argparse.ArgumentParser(description=__doc__)
+    add_config_argument(parser)
     parser.add_argument("--dataset-dir", "--base-dataset", dest="dataset_dir", required=True)
     parser.add_argument("--source-image-dir", default="G:/galaxydata/pawn")
     parser.add_argument("--response-mat", required=True)
@@ -391,7 +393,7 @@ def build_parser():
 
 
 def main():
-    args = build_parser().parse_args()
+    args = build_parser().parse_args(expand_config_argv())
     _, _, report = derive_dense_multi_roi_dataset(
         dataset_dir=args.dataset_dir,
         source_image_dir=args.source_image_dir,

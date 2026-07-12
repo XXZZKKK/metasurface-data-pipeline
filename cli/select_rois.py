@@ -14,6 +14,7 @@ import webbrowser
 import numpy as np
 
 from ..config.roi import MetasurfaceRoi, fixed_roi_from_center, save_rois_json, validate_rois
+from ..config.text_config import add_config_argument, expand_config_argv
 
 
 def _require_cv2():
@@ -360,6 +361,7 @@ def select_rois(
 
 def build_parser():
     parser = argparse.ArgumentParser(description=__doc__)
+    add_config_argument(parser)
     parser.add_argument("--dataset-dir", type=Path, help="Existing real dataset dir with calibration_report.json")
     parser.add_argument("--frame-index", type=int, default=0)
     parser.add_argument("--image", type=Path, help="Representative image path; overrides --dataset-dir image")
@@ -373,7 +375,7 @@ def build_parser():
 
 
 def main():
-    args = build_parser().parse_args()
+    args = build_parser().parse_args(expand_config_argv())
     if args.dataset_dir is not None:
         image_path, base_roi = _load_dataset_defaults(args.dataset_dir, args.frame_index)
     else:

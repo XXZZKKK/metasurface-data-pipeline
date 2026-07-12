@@ -27,6 +27,7 @@ from ..core.real_metasurface import (
     load_center2x2_response_from_mat,
 )
 from ..config.paths import default_output_dir
+from ..config.text_config import add_config_argument, expand_config_argv
 
 
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff"}
@@ -340,6 +341,7 @@ def build_cube_dataset(args):
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__)
+    add_config_argument(parser)
     parser.add_argument("--cube-image-dir", required=True, type=pathlib.Path)
     parser.add_argument("--cube-aprilgrid-json", required=True, type=pathlib.Path)
     parser.add_argument("--intrinsic-candidate", action="append", default=[])
@@ -363,7 +365,7 @@ def parse_args():
     parser.add_argument("--progress-every", type=int, default=20)
     parser.add_argument("--save-debug-images", action="store_true")
     parser.add_argument("--debug-image-limit", type=int, default=20)
-    return parser.parse_args()
+    return parser.parse_args(expand_config_argv())
 
 
 def main():

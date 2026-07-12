@@ -8,6 +8,7 @@ from ..observations.board_constrained import prepare_board_constrained_dataset
 from ..calibration.board_prior import BoardPrior
 from ..observations.dense import derive_dense_multi_roi_dataset
 from ..config.paths import default_output_dir
+from ..config.text_config import add_config_argument, expand_config_argv
 
 
 DEFAULT_APRILGRID_JSON = (
@@ -28,6 +29,7 @@ def _write_json(path, payload):
 
 def build_parser():
     parser = argparse.ArgumentParser(description=__doc__)
+    add_config_argument(parser)
     parser.add_argument("--dataset-dir", "--base-dataset", dest="dataset_dir", required=True)
     parser.add_argument("--source-image-dir", default="G:/galaxydata/pawn")
     parser.add_argument("--response-mat", required=True)
@@ -91,7 +93,7 @@ def run(args):
 
 
 def main():
-    run(build_parser().parse_args())
+    run(build_parser().parse_args(expand_config_argv()))
 
 
 if __name__ == "__main__":

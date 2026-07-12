@@ -3,10 +3,11 @@ from __future__ import annotations
 import json
 
 from ..observations.sparse import build_parser, derive_multi_roi_spectral_dataset
+from ..config.text_config import expand_config_argv
 
 
 def main():
-    args = build_parser().parse_args()
+    args = build_parser().parse_args(expand_config_argv())
     _, _, _, report = derive_multi_roi_spectral_dataset(
         dataset_dir=args.dataset_dir,
         source_image_dir=args.source_image_dir,

@@ -1,0 +1,24 @@
+# Build dense all-16-subcell, center-3x3, board-constrained observations.
+# This assumes build_base_dataset has already produced dataset-dir.
+# Example:
+# G:\anaconda_Envs\nerfstudio_3dgs\python.exe -m metasurface_data_pipeline.cli.build_multi_roi_dense_board_constrained `
+#   --config metasurface_data_pipeline\examples\dense_board_constrained_config.txt
+
+dataset-dir = metasurface_data_pipeline/outputs/cube2_base
+source-image-dir = G:/galaxydata/cube2
+response-mat = G:/projects/metasurface_3d_reconstruction/metasurface_data/shuju/A_matrix_normalized.mat
+rois-json = metasurface_data_pipeline/outputs/cube2_base/metasurface_rois.json
+aprilgrid-json = G:/projects/metasurface_3d_reconstruction/code/Aprilgrid/outputs/aprilgrid_10x10_5mm.json
+aprilgrid-png = G:/projects/metasurface_3d_reconstruction/code/Aprilgrid/outputs/aprilgrid_10x10_5mm.png
+output-dir = metasurface_data_pipeline/outputs/cube2_dense_all16_center3x3
+
+basis-count = 12
+fwhm-nm = 20.0
+center-window = 3
+expected-roi-count = 4
+include-polar = true
+all-subcells = true
+
+foreground-residual-threshold = 0.08
+min-foreground-fraction = 0.02
+fit-board-frame-affine = true

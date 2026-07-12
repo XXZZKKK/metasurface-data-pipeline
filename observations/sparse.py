@@ -23,6 +23,7 @@ from ..config.roi import (
     validate_rois,
 )
 from ..config.paths import default_output_dir
+from ..config.text_config import add_config_argument, expand_config_argv
 
 
 def _require_cv2():
@@ -225,6 +226,7 @@ def derive_multi_roi_spectral_dataset(
 
 def build_parser():
     parser = argparse.ArgumentParser(description=__doc__)
+    add_config_argument(parser)
     parser.add_argument("--dataset-dir", required=True)
     parser.add_argument("--source-image-dir", required=True)
     parser.add_argument("--response-mat", required=True)
@@ -239,7 +241,7 @@ def build_parser():
 
 
 def main():
-    args = build_parser().parse_args()
+    args = build_parser().parse_args(expand_config_argv())
     _, _, _, report = derive_multi_roi_spectral_dataset(
         dataset_dir=args.dataset_dir,
         source_image_dir=args.source_image_dir,
