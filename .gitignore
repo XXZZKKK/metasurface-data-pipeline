@@ -1,0 +1,14 @@
+outputs/
+__pycache__/
+*.pyc
+*.npy
+*.npz
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.tif
+*.tiff
+*.ply
+*.pt
+*.pth
